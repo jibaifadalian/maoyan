@@ -1,0 +1,30 @@
+@import './normalize.css';
+
+/* :root{
+  --color-text:#666;
+  --color-high-text:#ff5777;
+  --color--tint:#ff8189;
+  --color-background:#fff;
+  /* --font-size:14px; */
+/* } */ */
+.clear-fix::after {
+  clear: both;
+  content:'';
+  display:block;
+  width:0;
+  height: 0;
+  visibility: hidden;
+} 
+.clear-fix {
+  zoom:1;
+}
+::before,::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a{
+  display: block;
+  text-decoration:none;
+}

@@ -1,27 +1,88 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
-Vue.use(VueRouter)
-
+import VueRouter from 'vue-router';
+import Movie from '../views/movie/movie.vue';
+import Cinema from '../views/cinema/cinema.vue';
+import Profile from '../views/profie/profile.vue';
+import Mine from '../views/mine/mine.vue';
+import store from '@/store'
+const NowPlaying = () => import("../views/movie/NowPlaying.vue")
+const WillPlaying = () => import(/*webpackChunkName:'fff'*/'../views/movie/willPlaying')
+const Login = () => import(/*webpackChunkName:'fff'*/'@/views/login/login.vue')
+const Detail = () => import('@/views/movie/detail.vue'); 
+const Search = () => import('@/views/search/search')
+const City = () => import('@/views/city/City.vue')
+Vue.use(VueRouter) 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "",
+    redirect: "/movie",
+    component: Movie
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: "/movie",
+    component: Movie,
+    children: [
+      {
+        path: "",
+        redirect:'/movie/nowPlaying',
+        component: NowPlaying
+      },
+      {
+        path: "nowPlaying",
+        component: NowPlaying
+      },
+      {
+        path: "willPlaying",
+        component: WillPlaying
+      }
+    ]
+  },
+  {
+    path: "/cinema",
+    component: Cinema
+  },
+   {
+    path:'/cinema/search',
+    component:Search
+  },
+  {
+    path: "/profile",
+    component: Profile,
+ 
+  },
+  {
+    path: "/mine",
+    component: Mine
+  },
+  {
+    path: "/login",
+   
+    component: Login
+  },
+  {
+    path:'/film/:filmId',
+    component:Detail
+  },
+  {
+      path:'/city',
+      component:City
   }
-]
+];
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode:'history'
 })
-
-export default router
+router.beforeEach((to, from, next) => {
+  if(to.path==='/mine') {
+    if(store.state.isLogin===1){
+      next();
+    }else{
+      next('/login')
+    }
+  }else{
+    next()
+  }
+})
+ 
+export default router 
